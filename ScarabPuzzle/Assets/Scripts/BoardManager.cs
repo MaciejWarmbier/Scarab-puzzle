@@ -6,11 +6,11 @@ using TMPro;
 public class BoardManager : MonoBehaviour
 {
     [SerializeField] ScarabManager[] scarabs; 
-    [SerializeField] TextMeshProUGUI winText;
+    [SerializeField] TextMeshProUGUI upperText;
     [SerializeField] ParticleSystem winParticles;
     [SerializeField] bool blockXAxis;
     [SerializeField] bool blockZAxis;
-    [SerializeField] float winTime = 2f;
+    [SerializeField] float textTime = 2f;
 
     [SerializeField] LineCreator lineCreator;
     [SerializeField] AudioClip resetAudio;
@@ -34,34 +34,35 @@ public class BoardManager : MonoBehaviour
         for(int i=0;i<scarabs.Length;i++){
             scarabs[i].ResetScarab();
         }
+        StartCoroutine(UpdateText("RESET"));
         audioSource.PlayOneShot(resetAudio);
         lineCreator.Clear();
     }
-    public void CheckForWin(){
+
+    IEnumerator UpdateText(string text) {
+        upperText.enabled = true;
+        upperText.text = text;
+
+        yield return new WaitForSeconds(textTime);
+
+        upperText.enabled = false;
+    }
+    public bool CheckForWin(){
         foreach(ScarabManager scarab in scarabs){
             if(!scarab.isConnectedToAll()){
-                return;
+                return false;
             }
         }
-        StartCoroutine(Win());
+        Win();
+        return true;
     }
+    
 
-    /*
-    public void MoveScarabs(Vector3 position){
-        for(int i=0;i<scarabs.Length;i++){
-            scarabs[i].LookAtMousePosition(position, blockXAxis, blockZAxis);
-        }
-    }
-    */
-
-    IEnumerator Win(){
-        winText.enabled = true;
-        winText.text = "You won!";
+    void Win(){
+        StartCoroutine(UpdateText("You Won!"));
         winParticles.Play();
         audioSource.PlayOneShot(winAudio);
-        yield return new WaitForSeconds(winTime);
 
-        winText.enabled = false;
     }
 
 }

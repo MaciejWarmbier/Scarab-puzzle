@@ -35,7 +35,8 @@ public class ScarabManager : MonoBehaviour, IClick
     }
     
     void Connect(){
-        if(!boardManager.IsStarted()){
+        if(!boardManager.IsStarted())
+        {
             ChangeToChosen();
         }
         else
@@ -44,18 +45,24 @@ public class ScarabManager : MonoBehaviour, IClick
                 (ScarabManager neighborScarab, bool isConnected) neighbor = connections[i];
                 if (neighbor.neighborScarab.IsChosen && !neighbor.isConnected ){
                     connections[i] = (neighbor.neighborScarab,true);
-                    neighbor.neighborScarab.AddConnection(this);
+                    neighbor.neighborScarab.AddExternalConnection(this);
                     lineCreator.DrawLine(gameObject.transform.position, neighbor.neighborScarab.transform.position);
                     ChangeToChosen();
-                    boardManager.CheckForWin();
+                    if(!boardManager.CheckForWin())
+                    {
+                        if(NeedsReset()){
+                            boardManager.ResetBoard();
+                        }
+                    }
                 }
             }
         }
+    
     }
 
     
     
-    public void AddConnection(ScarabManager neighborPassed){
+    public void AddExternalConnection(ScarabManager neighborPassed){
         for(int i=0; i<connections.Count; i++){
             (ScarabManager neighborScarab, bool isConnected) neighbor = connections[i];
             if(neighborPassed.GetInstanceID() == neighbor.neighborScarab.GetInstanceID()){
@@ -94,40 +101,12 @@ public class ScarabManager : MonoBehaviour, IClick
         }
     }
 
-    /*
-    public void LookAtMousePosition(Vector3 position, bool blockXAxis, bool blockZAxis){
-        
-        var angle = Mathf.Atan2(position.y, position.x) * Mathf.Rad2Deg;
-        Vector3 old = position;
-        Vector3 rotation = Quaternion.LookRotation(position).eulerAngles;
-        if(blockZAxis){
-            position = new Vector3(position.x, position.y , transform.TransformPoint(Vector3.zero).z + 0.4f);
-            rotation.x = transform.rotation.x;
-            rotation.y = transform.rotation.y;
+    bool NeedsReset(){
+        for(int i=0; i<connections.Count; i++){
+            if(!connections[i].isConnected){
+                return false;
+            }
         }
-        else if(blockXAxis){
-            rotation.z = transform.rotation.z;
-            rotation.y = transform.rotation.y;
-        }
-        Debug.Log("Ray : " + old + "  Position: " + position + "  Scarab:" + transform.position);
-        transform.LookAt(position);
-        //transform.rotation = Quaternion.Euler(rotation);
-        //transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-       // transform.rotation = Quaternion.Euler(rotation);
-        
-        position = new Vector3(position.x, position.y , transform.position.z);
-
-        Vector3 _direction = (position - transform.position).normalized;
-        
-         //create the rotation we need to be in to look at the target
-         Quaternion _lookRotation = Quaternion.LookRotation(_direction);
-         _lookRotation.z = 0f;
-         
- 
-         //rotate us over time according to speed until we are in the required rotation
-         transform.rotation = _lookRotation;
-
+        return true;
     }
-    */
-    
 }
