@@ -13,7 +13,7 @@ public class ObjectAiming : MonoBehaviour
     
     void Update()
     {
-        LocatingMousePosition();
+        //LocatingMousePosition();
 
         if(Input.GetKeyDown(KeyCode.R)){
             ResetObjects();
@@ -24,6 +24,7 @@ public class ObjectAiming : MonoBehaviour
         }
     }
 
+    /*
     void LocatingMousePosition(){
         RaycastHit[] hits;
         Ray ray = cameraPointer.ScreenPointToRay(Input.mousePosition);
@@ -46,6 +47,7 @@ public class ObjectAiming : MonoBehaviour
         }
 
     }
+    */
 
     void ResetObjects(){
         RaycastHit[] hits;

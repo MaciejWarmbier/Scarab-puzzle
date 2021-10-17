@@ -13,6 +13,13 @@ public class BoardManager : MonoBehaviour
     [SerializeField] float winTime = 2f;
 
     [SerializeField] LineCreator lineCreator;
+    [SerializeField] AudioClip resetAudio;
+    [SerializeField] AudioClip winAudio;
+    AudioSource audioSource;
+
+    private void Awake() {
+        audioSource = GetComponent<AudioSource>();
+    }
     
     public bool IsStarted(){
         foreach(ScarabManager scarab in scarabs){
@@ -27,6 +34,7 @@ public class BoardManager : MonoBehaviour
         for(int i=0;i<scarabs.Length;i++){
             scarabs[i].ResetScarab();
         }
+        audioSource.PlayOneShot(resetAudio);
         lineCreator.Clear();
     }
     public void CheckForWin(){
@@ -38,16 +46,19 @@ public class BoardManager : MonoBehaviour
         StartCoroutine(Win());
     }
 
+    /*
     public void MoveScarabs(Vector3 position){
         for(int i=0;i<scarabs.Length;i++){
             scarabs[i].LookAtMousePosition(position, blockXAxis, blockZAxis);
         }
     }
+    */
 
     IEnumerator Win(){
         winText.enabled = true;
         winText.text = "You won!";
         winParticles.Play();
+        audioSource.PlayOneShot(winAudio);
         yield return new WaitForSeconds(winTime);
 
         winText.enabled = false;

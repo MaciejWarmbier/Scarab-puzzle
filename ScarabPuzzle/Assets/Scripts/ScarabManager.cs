@@ -10,8 +10,7 @@ public class ScarabManager : MonoBehaviour, IClick
     [SerializeField] Sprite connectedSprite;
     [SerializeField] BoardManager boardManager;
     [SerializeField] LineCreator lineCreator;
-    [SerializeField] float scarabOffset = 0.35f;
-    
+    AudioSource audioSource;    
     List<(ScarabManager neighborScarab, bool isConnected)> connections;
     SpriteRenderer sprite;
     bool isChosen;
@@ -20,7 +19,7 @@ public class ScarabManager : MonoBehaviour, IClick
     void Start()
     {
         sprite = gameObject.GetComponentInChildren<SpriteRenderer>();
-        
+        audioSource = GetComponent<AudioSource>();
         connections = new List<(ScarabManager neighborScarab, bool isConnected)>();
         foreach(ScarabManager neighbor in neighbors){
             (ScarabManager neighborScarab, bool isConnected) connection = (neighbor, false);
@@ -69,6 +68,8 @@ public class ScarabManager : MonoBehaviour, IClick
     void ChangeToConnected(){
         isChosen = false;
         sprite.sprite = connectedSprite;
+        audioSource.time = 0.380f;
+        audioSource.Play();
     }
     void ChangeToChosen(){
         sprite.sprite = chosenSprite;
@@ -93,12 +94,14 @@ public class ScarabManager : MonoBehaviour, IClick
         }
     }
 
+    /*
     public void LookAtMousePosition(Vector3 position, bool blockXAxis, bool blockZAxis){
+        
         var angle = Mathf.Atan2(position.y, position.x) * Mathf.Rad2Deg;
         Vector3 old = position;
         Vector3 rotation = Quaternion.LookRotation(position).eulerAngles;
         if(blockZAxis){
-            position = new Vector3(position.x, position.y , transform.TransformPoint(Vector3.zero).z);
+            position = new Vector3(position.x, position.y , transform.TransformPoint(Vector3.zero).z + 0.4f);
             rotation.x = transform.rotation.x;
             rotation.y = transform.rotation.y;
         }
@@ -107,10 +110,24 @@ public class ScarabManager : MonoBehaviour, IClick
             rotation.y = transform.rotation.y;
         }
         Debug.Log("Ray : " + old + "  Position: " + position + "  Scarab:" + transform.position);
-        //transform.LookAt(position);
-        transform.rotation = Quaternion.Euler(rotation);
+        transform.LookAt(position);
+        //transform.rotation = Quaternion.Euler(rotation);
         //transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
        // transform.rotation = Quaternion.Euler(rotation);
+        
+        position = new Vector3(position.x, position.y , transform.position.z);
+
+        Vector3 _direction = (position - transform.position).normalized;
+        
+         //create the rotation we need to be in to look at the target
+         Quaternion _lookRotation = Quaternion.LookRotation(_direction);
+         _lookRotation.z = 0f;
+         
+ 
+         //rotate us over time according to speed until we are in the required rotation
+         transform.rotation = _lookRotation;
+
     }
+    */
     
 }
