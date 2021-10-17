@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 444947975727753394}
   - component: {fileID: 3412072289836136591}
+  - component: {fileID: 1028636888}
   m_Layer: 0
   m_Name: ScarabObject
   m_TagString: Untagged
@@ -25,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 444947975727753395}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.409, y: -4.1499996, z: -0.1}
+  m_LocalPosition: {x: -0.457, y: -4.192, z: -0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 444947976310936024}
@@ -44,6 +45,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c1cb6b7a4bc3f441b1007a87e5d9b57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  neighbors: []
+--- !u!65 &1028636888
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 444947975727753395}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.5098293, y: 1.767417, z: 0}
+  m_Center: {x: -0.009110212, y: 0.015610218, z: 0}
 --- !u!1 &444947976310936025
 GameObject:
   m_ObjectHideFlags: 0
